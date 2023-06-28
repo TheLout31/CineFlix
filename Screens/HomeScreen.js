@@ -9,15 +9,34 @@ import {
 import { StyleSheet } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Trending from "../Components/Trending";
-import { useState } from "react";
-import MovieList from '../Components/MovieList'
+import { useEffect, useState } from "react";
+import MovieList from "../Components/MovieList";
 import { useNavigation } from "@react-navigation/native";
+import { fetchTopRatedData, fetchTrendingData, fetchUpcomingData } from "../Api/MovieDB";
 
 function HomeScreen() {
-  const [trending , setTrending] = useState([1,2,3]);
-  const [toprated , setToprated] = useState([1,2,3]);
-  const [upcoming , setUpcoming] = useState([1,2,3]);
+  const [trending, setTrending] = useState([1, 2, 3]);
+  const [toprated, setToprated] = useState([1, 2, 3]);
+  const [upcoming, setUpcoming] = useState([1, 2, 3]);
+  const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
+  useEffect(() => {
+    getTrendingMovies();
+    getUpcomingMovies();
+    getTopRatedMovies();
+  });
+  const getTrendingMovies = async () => {
+    const data = await fetchTrendingData();
+    if (data && data.results) setTrending(data.results);
+  };
+  const getUpcomingMovies = async () => {
+    const data = await fetchUpcomingData();
+    if (data && data.results) setUpcoming(data.results);
+  };
+  const getTopRatedMovies = async () => {
+    const data = await fetchTopRatedData();
+    if (data && data.results) setToprated(data.results);
+  };
   return (
     <View style={styles.container}>
       <SafeAreaView forceInset={{ top: "always" }}>
@@ -27,20 +46,21 @@ function HomeScreen() {
           <Text style={styles.movieTitle}>
             <Text style={styles.movieTitle2}>Cine</Text>Flix
           </Text>
-          <Pressable onPress={()=>navigation.navigate('Search')}>
+          <Pressable onPress={() => navigation.navigate("Search")}>
             <Ionicons name="search" size={30} color="white" />
           </Pressable>
         </View>
+
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 80 }}
         >
           {/*showing trending movies using carousole */}
-          <Trending data={trending}/>
+          <Trending data={trending} />
           {/*showing upcoming movies using row scroll view */}
-          <MovieList title='Upcoming' data={upcoming}/>
+          <MovieList title="Upcoming" data={upcoming} />
           {/*showing top rated movies using row scroll view */}
-          <MovieList title='TopRated ' data={upcoming}/>
+          <MovieList title="TopRated " data={toprated} />
         </ScrollView>
       </SafeAreaView>
     </View>

@@ -2,6 +2,7 @@ import { Image, ScrollView, Dimensions } from "react-native";
 import { TouchableWithoutFeedback } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { Text, View, StyleSheet } from "react-native";
+import { image185, image342 } from "../Api/MovieDB";
 const { width, height } = Dimensions.get("screen");
 function MovieList({ title, data }) {
   const movieName = "Joker";
@@ -29,7 +30,7 @@ function MovieList({ title, data }) {
               <View style={styles.movieView}>
                 <Image
                   source={{
-                    uri: "https://i.pinimg.com/564x/67/09/6c/67096c448c9664196145a32b22707cbd.jpg",
+                    uri: image185(item.poster_path),
                   }}
                   style={{
                     width: width * 0.33,
